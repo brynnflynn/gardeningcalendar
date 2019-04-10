@@ -48,7 +48,11 @@ namespace GoogleCalendarGardeningGenerator.Host
             get => _lastFrostDate;
             set
             {
-                _lastFrostDate = value;
+                if (value < new DateTime(1900,1,1))
+                    _lastFrostDate = new DateTime(DateTime.Today.Year, 1,1);
+                else
+                    _lastFrostDate = value;
+
                 OnPropertyChanged();
             }
         }
@@ -60,7 +64,11 @@ namespace GoogleCalendarGardeningGenerator.Host
             get => _firstFrostDate;
             set
             {
-                _firstFrostDate = value;
+                if (value < new DateTime(1900, 1, 1))
+                    _firstFrostDate = new DateTime(DateTime.Today.Year, 12, 30);
+                else
+                    _firstFrostDate = value;
+
                 OnPropertyChanged();
             }
         }
@@ -207,8 +215,9 @@ namespace GoogleCalendarGardeningGenerator.Host
                 {
                     plantingDateEventRequest.Execute();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
+                    // swallowing, as the system can get overloaded sometimes
                     Thread.Sleep(5000);
                     plantingDateEventRequest.Execute();
                 }
@@ -231,8 +240,9 @@ namespace GoogleCalendarGardeningGenerator.Host
             {
                 plantingDateEventRequest.Execute();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                // swallowing, as the system can get overloaded sometimes
                 Thread.Sleep(5000);
                 plantingDateEventRequest.Execute();
             }
@@ -259,8 +269,9 @@ namespace GoogleCalendarGardeningGenerator.Host
                 {
                     deleteRequest.Execute();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
+                    // swallowing, as the system can get overloaded sometimes
                     Thread.Sleep(5000);
                     deleteRequest.Execute();
                 }
